@@ -1,7 +1,7 @@
 import numpy as np
 import healpy as hp
 
-def CSTmap2healpix(in_filename,nside_out):
+def CSTmap2healpix(in_filename:str,nside_out:int) -> np.ndarray:
     """   
     Map a CST theta-phi map into an healpix map
 

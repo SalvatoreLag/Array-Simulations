@@ -1,6 +1,6 @@
 import numpy as np
 
-def upa_positions(Nx,Ny,dx,dy):
+def upa_positions(Nx:int,Ny: int,dx:float=0.5,dy:float=0.5) -> np.ndarray:
     """   
     Compute positions  for elements in a regular rectangular grid.
 
@@ -26,7 +26,7 @@ def upa_positions(Nx,Ny,dx,dy):
     p = np.stack((px,py),1)
     return p
 
-def hex_positions(N,d):
+def hex_positions(N:int,d:float=0.5) -> np.ndarray:
     """   
     Compute positions  for elements in a regular hexagonal grid.
 

@@ -1,7 +1,7 @@
 import numpy as np
 import healpy as hp
 
-def array_pattern_matrix(nside,source_pixels,scan_pixels,positions):
+def array_pattern_matrix(nside:int,source_pixels:np.ndarray,scan_pixels:np.ndarray,positions:np.ndarray) -> np.ndarray:
     """
     Compute the array pattern steered in specific direction(s).
 
@@ -42,7 +42,7 @@ def array_pattern_matrix(nside,source_pixels,scan_pixels,positions):
     
     return A
 
-def array_pattern_loop(nside,source_pixels,scan_pixel,positions):
+def array_pattern_loop(nside:int,source_pixels:np.ndarray,scan_pixel:np.ndarray,positions:np.ndarray) -> np.ndarray:
     """
     Compute the array pattern steered in specific direction.
 
