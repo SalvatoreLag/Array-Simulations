@@ -13,7 +13,7 @@ for bw in [60,90,120]:
 
         nside = hp.pixelfunc.get_min_valid_nside(len(Eabs))
         npix = hp.nside2npix(nside=nside)
-        element_map = np.zeros(npix)
+        element_map = np.ones(npix)*np.inf
         pixels = hp.ang2pix(nside,theta,phi)
 
         element_map[pixels] = Eabs
