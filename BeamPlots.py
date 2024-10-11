@@ -10,7 +10,7 @@ diameter = 0.9
 f0 = 5e9
 l0 = 3e8/f0
 
-p = ap.tpa_positionsV2(N,diameter)
+p = ap.hex_positions(N,diameter)
 
 fig = plt.figure(figsize=(8,6))
 ax = fig.add_subplot()

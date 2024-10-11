@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 # Array and stations
 N = 5
 diameter = 0.9
-p = ap.tpa_positionsV2(N,diameter)
+p = ap.hex_positions(N,diameter)
 nStations = 36
 stationRots = np.radians(np.linspace(0,180,nStations))
 

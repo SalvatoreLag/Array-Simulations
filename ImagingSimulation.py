@@ -9,7 +9,7 @@ N = 5
 diameter = 0.9
 f0 = 5e9
 l0 = 3e8/f0
-p = ap.tpa_positionsV2(N,diameter)
+p = ap.hex_positions(N,diameter)
 
 # Get clean image
 filename = './CleanImages/LowRes3.txt'
