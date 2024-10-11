@@ -17,7 +17,7 @@ ax = fig.add_subplot()
 ax.scatter(p[:,0]*l0,p[:,1]*l0)
 ax.set_xlabel('x [m]')
 ax.set_ylabel('y [m]')
-plt.grid
+plt.grid()
 plt.savefig('./Outputs/positions.png')
 
 # Define visible space
