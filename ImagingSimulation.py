@@ -3,7 +3,6 @@ import array_beam as ab
 import healpy as hp
 import numpy as np
 import matplotlib.pyplot as plt
-import time
 
 # Array
 N = 5
@@ -25,11 +24,14 @@ seen_img = clean_img[sky_pixels]
 u,v,_ = hp.pix2vec(nside,sky_pixels)
 
 # Plot clean image
-fig = plt.figure(figsize=(4,4))
+fig = plt.figure(figsize=(8,6))
 ax = fig.add_subplot()
-ax.tripcolor(u,v,seen_img)
+im = ax.tripcolor(u,v,seen_img)
+ax.axis('equal')
+ax.set(xlim=(-1,1),ylim=(-1,1))
 ax.set_xlabel('u [-]')
 ax.set_ylabel('v [-]')
+fig.colorbar(im,ax=ax)
 plt.savefig('./Outputs/clean_uv.png')
 
 # Get element pattern
@@ -48,9 +50,12 @@ for idx,pix in enumerate(scan_pixels):
     dirty_img[np.atleast_1d(idx)] = (E*A)@seen_img
 
 # Plot dirty image
-fig = plt.figure(figsize=(4,4))
+fig = plt.figure(figsize=(8,6))
 ax = fig.add_subplot()
-ax.tripcolor(u0,v0,dirty_img)
+im = ax.tripcolor(u0,v0,dirty_img)
+ax.axis('equal')
+ax.set(xlim=(-1,1),ylim=(-1,1))
 ax.set_xlabel('u [-]')
 ax.set_ylabel('v [-]')
+fig.colorbar(im,ax=ax)
 plt.savefig('./Outputs/dirty_uv.png')
