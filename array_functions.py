@@ -266,5 +266,5 @@ def numerical_directivity(FieldPattern,theta,phi):
     """
 
     D_num = 4*np.pi*np.max(FieldPattern)
-    D_den = 2*radiated_power(FieldPattern,theta,phi)
+    D_den = radiated_power(FieldPattern,theta,phi)
     return D_num/D_den

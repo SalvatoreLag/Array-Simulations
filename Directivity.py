@@ -15,23 +15,17 @@ a = np.ones(Nx)
 
 # Analytical directivity
 D1 = af.linear_directivity(a,dx)
-print(D1)
+print(10*np.log10(D1))
+
+# Element pattern
+filename = './ElementPatterns/Farfield120_5GHz.txt'
+E, theta, phi = mf.import_pattern(filename,1)
+Ehalf = E[:,:91]
+theta_half = theta[:91]
 
 # Numerical directivity
-theta = np.radians(np.arange(0,91))
-phi = np.radians(np.arange(0,361))
-T,P = np.meshgrid(theta,phi)
-U = np.sin(T)*np.cos(P)
-V = np.sin(T)*np.sin(P)
-
 A = af.array_pattern_grid(theta,phi,0,0,p)
-dt = np.radians(1)
-dp = np.radians(1)
-D2 = af.numerical_directivity(A,theta,phi,dt,dp)
-print(D2)
-
-# With element pattern
-filename = './ElementPatterns/Farfield120_5GHz.txt'
-E, theta, phi = mf.import_halfPattern(filename,1)
+D2 = af.numerical_directivity(A,theta,phi)
+print(10*np.log10(D2))
 
 
