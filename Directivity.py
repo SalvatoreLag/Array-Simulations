@@ -2,6 +2,7 @@ import numpy as np
 import array_functions as af
 import healpy as hp
 import matplotlib.pyplot as plt
+import map_functions as mf
 
 # Define array
 Nx = 10
@@ -14,25 +15,23 @@ a = np.ones(Nx)
 
 # Analytical directivity
 D1 = af.linear_directivity(a,dx)
+print(D1)
 
 # Numerical directivity
-theta = np.radians(np.arange(91))
-phi = np.radians(np.arange(361))
+theta = np.radians(np.arange(0,91))
+phi = np.radians(np.arange(0,361))
 T,P = np.meshgrid(theta,phi)
 U = np.sin(T)*np.cos(P)
 V = np.sin(T)*np.sin(P)
 
 A = af.array_pattern_grid(theta,phi,0,0,p)
-
-fig = plt.figure(figsize=(8,6))
-ax = fig.add_subplot()
-im = ax.tripcolor(u,v,A_steered,vmin=-40)
-ax.axis('equal')
-ax.set(xlim=(-1,1),ylim=(-1,1))
-ax.set_xlabel('u [-]')
-ax.set_ylabel('v [-]')
-plt.colorbar(im,ax=ax)
-plt.savefig('./Outputs/Asteered.png')
+dt = np.radians(1)
+dp = np.radians(1)
+D2 = af.numerical_directivity(A,theta,phi,dt,dp)
+print(D2)
 
 # With element pattern
+filename = './ElementPatterns/Farfield120_5GHz.txt'
+E, theta, phi = mf.import_halfPattern(filename,1)
+
 

@@ -1,6 +1,7 @@
 import numpy as np
 import healpy as hp
 
+
 def CSTmap2healpix(in_filename:str,nside_out:int) -> np.ndarray:
     """   
     Map a CST theta-phi map into an healpix map.
@@ -46,6 +47,40 @@ def CSTmap2healpix(in_filename:str,nside_out:int) -> np.ndarray:
     healpix_map = hp.ud_grade(healpix_map,nside_out)
 
     return healpix_map
+
+
+def import_halfPattern(filename,delta):
+    """   
+    Import a CST radiation pattern into a [0,90]x[0,360] grid 
+    with resolution delta.
+
+    Parameters
+    ----------
+    filename: str
+        name of the txt file containing the CST theta-phi map.
+    delta: float
+        resolution of the input data.
+
+    Returns 
+    -------
+    Eabs: array_like 
+        absolute value of the radiated field.
+    theta: array_like
+        elevation angles in radians where the radiated field is evaluated.
+    phi: array_like
+        azimuth angles in radians where the radiated field is evaluated.
+    """
+
+    table = np.loadtxt(filename,skiprows=2)
+
+    phi = np.radians(np.arange(0,360,delta))
+    nphi = len(phi)
+
+    Eabs = table[:,2].reshape((nphi,-1))
+    theta = np.radians(np.arange(0,90+delta,delta))
+    ntheta = len(theta)
+    
+    return Eabs[:,:ntheta], theta, phi
 
 
 if __name__=='__main__':

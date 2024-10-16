@@ -1,6 +1,7 @@
 import numpy as np
 import healpy as hp
 
+
 def upa_positions(Nx:int,Ny: int,dx:float=0.5,dy:float=0.5) -> np.ndarray:
     """   
     Compute positions  for elements in a regular rectangular grid.
@@ -171,6 +172,7 @@ def array_pattern_grid(theta:np.ndarray,phi:np.ndarray,theta0:float,phi0:float,p
         theta-phi matrix containing the array pattern steered 
         in direction specified by theta0 and phi0. 
     """
+
     ntheta = len(theta)
     nphi = len(phi)
     T,P = np.meshgrid(theta,phi)
@@ -202,6 +204,7 @@ def linear_directivity(a:np.ndarray,d:float) -> float:
     Directivity: float 
         directivity (in dB). 
     """
+
     N = len(a)
     D_num = np.sum(np.abs(a))**2
     coeff_products = np.kron(a,a).reshape((N,N))
@@ -216,3 +219,52 @@ def linear_directivity(a:np.ndarray,d:float) -> float:
     Directivity = 10*np.log10(D_num/D_den)
 
     return Directivity
+
+
+def radiated_power(FieldPattern,theta,phi):
+    """
+    Evaluate numerically the total radiated power.
+
+    Parameters
+    ----------
+    FieldPattern: array_like
+        2D array of the radiated field.
+    theta: array_like
+        elevation angles in radians where the radiated field is evaluated.
+    phi: array_like
+        azimuth angles in radians where the radiated field is evaluated.
+
+    Returns 
+    -------
+    Prad: float 
+        total radiated power. 
+    """
+
+    dt = theta[1]-theta[0]
+    dp = phi[1]-phi[0]
+
+    return 2*np.sum(np.sum(FieldPattern*np.sin(theta),1)*dt,0)*dp
+
+
+def numerical_directivity(FieldPattern,theta,phi):
+    """
+    Evaluate numerically the directivity of a radiation pattern.
+
+    Parameters
+    ----------
+    FieldPattern: array_like
+        2D array of the radiated field.
+    theta: array_like
+        elevation angles in radians where the radiated field is evaluated.
+    phi: array_like
+        azimuth angles in radians where the radiated field is evaluated.
+
+    Returns 
+    -------
+    Directivity: float 
+        directivity (in dB). 
+    """
+
+    D_num = 4*np.pi*np.max(FieldPattern)
+    D_den = radiated_power(FieldPattern,theta,phi)
+    return 10*np.log10(D_num/D_den)
