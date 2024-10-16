@@ -27,6 +27,7 @@ def upa_positions(Nx:int,Ny: int,dx:float=0.5,dy:float=0.5) -> np.ndarray:
     p = np.stack((px,py),1)
     return p
 
+
 def hex_positions(N:int,d:float=0.5) -> np.ndarray:
     """   
     Compute positions  for elements in a regular hexagonal grid.
@@ -61,9 +62,11 @@ def hex_positions(N:int,d:float=0.5) -> np.ndarray:
     p = np.concatenate((p1,p2),0)
     return p
 
+
 def array_pattern_matrix(nside:int,source_pixels:np.ndarray,scan_pixels:np.ndarray,positions:np.ndarray) -> np.ndarray:
     """
-    Compute the array pattern steered in specific direction(s).
+    Compute the array pattern steered in specific direction(s),
+    using the healpix format
 
     Parameters
     ----------
@@ -105,9 +108,11 @@ def array_pattern_matrix(nside:int,source_pixels:np.ndarray,scan_pixels:np.ndarr
     
     return A
 
+
 def array_pattern_loop(nside:int,source_pixels:np.ndarray,scan_pixel:np.ndarray,positions:np.ndarray) -> np.ndarray:
     """
-    Compute the array pattern steered in specific direction.
+    Compute the array pattern steered in specific direction,
+    using the healpix format.
 
     Parameters
     ----------
@@ -140,3 +145,74 @@ def array_pattern_loop(nside:int,source_pixels:np.ndarray,scan_pixel:np.ndarray,
     A = np.abs(np.sum(np.exp(1j*2*np.pi*positions@(S-S0)),0))**2
     
     return A
+
+
+def array_pattern_grid(theta:np.ndarray,phi:np.ndarray,theta0:float,phi0:float,positions:np.ndarray) -> np.ndarray:
+    """
+    Compute the array pattern steered in specific direction,
+    on a theta-phi grid.
+
+    Parameters
+    ----------
+    theta: array_like
+        Elevation angles in radians where to compute the array pattern.
+    phi: array_like
+        Azimuthal angles in radians where to compute the array pattern.
+    theta0: float
+        Elevation steering angle.
+    phi0: float
+        Azimuthal steering angle.
+    positions: array_like
+        (Nelem,2) matrix of normalized element positions.
+
+    Returns 
+    -------
+    A: array_like 
+        theta-phi matrix containing the array pattern steered 
+        in direction specified by theta0 and phi0. 
+    """
+    ntheta = len(theta)
+    nphi = len(phi)
+    T,P = np.meshgrid(theta,phi)
+    t = T.reshape(nphi*ntheta)
+    p = P.reshape(nphi*ntheta)
+
+    S = hp.ang2vec(t,p)[:,:2].T
+    S0 = hp.ang2vec(np.atleast_1d(theta0),np.atleast_1d(phi0))[:,:2].T
+
+    A = np.abs(np.sum(np.exp(1j*2*np.pi*positions@(S-S0)),0))**2
+    
+    return A.reshape((nphi,ntheta))
+
+
+def linear_directivity(a:np.ndarray,d:float) -> float:
+    """
+    Compute the directivity for a uniform linear array with tapering a
+    and spacing d.
+
+    Parameters
+    ----------
+    a: array_like
+        array of tapering coefficients.
+    d: float
+        element spacing.
+
+    Returns 
+    -------
+    Directivity: float 
+        directivity (in dB). 
+    """
+    N = len(a)
+    D_num = np.sum(np.abs(a))**2
+    coeff_products = np.kron(a,a).reshape((N,N))
+
+    diff_matrix = np.zeros((N,N))
+    for i in range(1,N):
+        diag = np.ones(N-i)*i
+        diff_matrix = diff_matrix + np.diag(-diag,i) + np.diag(diag,-i)
+    
+    sinc_args = 2*d*diff_matrix
+    D_den = np.sum(coeff_products*np.sinc(sinc_args))
+    Directivity = 10*np.log10(D_num/D_den)
+
+    return Directivity
