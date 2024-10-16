@@ -16,6 +16,12 @@ def CSTmap2healpix(in_filename:str,nside_out:int) -> np.ndarray:
     -------
     healpix_map: array_like 
         transformed healpix map.
+
+    Notes
+    -----
+    The minimum healpix map resolution is first computed, and 
+    available data is written on the map. The values for empty pixels are 
+    computed by averaging the values of their neighbors.
     """
     
     table = np.loadtxt(in_filename,skiprows=2)
