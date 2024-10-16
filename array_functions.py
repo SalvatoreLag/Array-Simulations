@@ -221,14 +221,15 @@ def linear_directivity(a:np.ndarray,d:float) -> float:
     return Directivity
 
 
-def radiated_power(FieldPattern,theta,phi):
+def radiated_power(PowerPattern:np.ndarray,theta:np.ndarray,phi:np.ndarray) -> float:
     """
     Evaluate numerically the total radiated power.
 
     Parameters
     ----------
-    FieldPattern: array_like
-        2D array of the radiated field.
+    PowerPattern: array_like
+        2D array of the radiated field with phi dependence on the 0th axis and
+        thtea dependence on the 1st axis.
     theta: array_like
         elevation angles in radians where the radiated field is evaluated.
     phi: array_like
@@ -243,17 +244,18 @@ def radiated_power(FieldPattern,theta,phi):
     dt = theta[1]-theta[0]
     dp = phi[1]-phi[0]
 
-    return np.sum(np.sum(FieldPattern*np.sin(theta),1)*dt,0)*dp
+    return np.sum(np.sum(PowerPattern*np.sin(theta),1)*dt,0)*dp
 
 
-def numerical_directivity(FieldPattern,theta,phi):
+def numerical_directivity(PowerPattern:np.ndarray,theta:np.ndarray,phi:np.ndarray) -> float:
     """
     Evaluate numerically the directivity of a radiation pattern.
 
     Parameters
     ----------
-    FieldPattern: array_like
-        2D array of the radiated field.
+    PowerPattern: array_like
+        2D array of the radiated field with phi dependence on the 0th axis and
+        thtea dependence on the 1st axis.
     theta: array_like
         elevation angles in radians where the radiated field is evaluated.
     phi: array_like
@@ -265,6 +267,6 @@ def numerical_directivity(FieldPattern,theta,phi):
         directivity. 
     """
 
-    D_num = 4*np.pi*np.max(FieldPattern)
-    D_den = radiated_power(FieldPattern,theta,phi)
+    D_num = 4*np.pi*np.max(PowerPattern)
+    D_den = radiated_power(PowerPattern,theta,phi)
     return D_num/D_den

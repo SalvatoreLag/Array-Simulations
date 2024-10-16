@@ -49,7 +49,7 @@ def CSTmap2healpix(in_filename:str,nside_out:int) -> np.ndarray:
     return healpix_map
 
 
-def import_pattern(filename,delta):
+def import_pattern(filename:str,delta:float) -> np.ndarray:
     """   
     Import a CST radiation pattern into a [0,180]x[0,360] grid 
     with resolution delta.
