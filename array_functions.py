@@ -202,7 +202,7 @@ def linear_directivity(a:np.ndarray,d:float) -> float:
     Returns 
     -------
     Directivity: float 
-        directivity (in dB). 
+        directivity. 
     """
 
     N = len(a)
@@ -216,7 +216,7 @@ def linear_directivity(a:np.ndarray,d:float) -> float:
     
     sinc_args = 2*d*diff_matrix
     D_den = np.sum(coeff_products*np.sinc(sinc_args))
-    Directivity = 10*np.log10(D_num/D_den)
+    Directivity = D_num/D_den
 
     return Directivity
 
@@ -243,7 +243,7 @@ def radiated_power(FieldPattern,theta,phi):
     dt = theta[1]-theta[0]
     dp = phi[1]-phi[0]
 
-    return 2*np.sum(np.sum(FieldPattern*np.sin(theta),1)*dt,0)*dp
+    return np.sum(np.sum(FieldPattern*np.sin(theta),1)*dt,0)*dp
 
 
 def numerical_directivity(FieldPattern,theta,phi):
@@ -262,9 +262,9 @@ def numerical_directivity(FieldPattern,theta,phi):
     Returns 
     -------
     Directivity: float 
-        directivity (in dB). 
+        directivity. 
     """
 
     D_num = 4*np.pi*np.max(FieldPattern)
-    D_den = radiated_power(FieldPattern,theta,phi)
-    return 10*np.log10(D_num/D_den)
+    D_den = 2*radiated_power(FieldPattern,theta,phi)
+    return D_num/D_den

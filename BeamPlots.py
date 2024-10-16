@@ -21,12 +21,15 @@ plt.savefig('./Outputs/positions.png')
 
 # Element pattern
 filename = './ElementPatterns/Farfield120_5GHz.txt'
-E,theta,phi = mf.import_halfPattern(filename,1)
-T,P = np.meshgrid(theta,phi)
+E,theta,phi = mf.import_pattern(filename,1)
+half = 91
+theta_half = theta[:half]
+Ehalf = E[:,:half]
+T,P = np.meshgrid(theta_half,phi)
 U = np.sin(T)*np.cos(P)
 V = np.sin(T)*np.sin(P)
 
-E_plot = 20*np.log10(E/np.max(E))
+E_plot = 20*np.log10(Ehalf/np.max(Ehalf))
 fig = plt.figure(figsize=(8,6))
 ax = fig.add_subplot()
 im = ax.pcolor(U,V,E_plot)
@@ -43,7 +46,7 @@ theta0 = np.radians(90)
 phi0 = np.radians(0)
 
 # Compute steered array pattern 
-A_grid = af.array_pattern_grid(theta,phi,theta0,phi0,p)
+A_grid = af.array_pattern_grid(theta_half,phi,theta0,phi0,p)
 
 A_plot = 10*np.log10(A_grid/np.max(A_grid))
 fig = plt.figure(figsize=(8,6))
@@ -57,7 +60,7 @@ plt.colorbar(im,ax=ax)
 plt.savefig('./Outputs/AsteeredGrid.png')
 
 # With real elements
-A_elem = (E**2)*A_grid
+A_elem = (Ehalf**2)*A_grid
 
 A_plot = 10*np.log10(A_elem/np.max(A_elem))
 fig = plt.figure(figsize=(8,6))

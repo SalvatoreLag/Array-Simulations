@@ -49,9 +49,9 @@ def CSTmap2healpix(in_filename:str,nside_out:int) -> np.ndarray:
     return healpix_map
 
 
-def import_halfPattern(filename,delta):
+def import_pattern(filename,delta):
     """   
-    Import a CST radiation pattern into a [0,90]x[0,360] grid 
+    Import a CST radiation pattern into a [0,180]x[0,360] grid 
     with resolution delta.
 
     Parameters
@@ -73,14 +73,13 @@ def import_halfPattern(filename,delta):
 
     table = np.loadtxt(filename,skiprows=2)
 
+    theta = np.radians(np.arange(0,180+delta,delta))
     phi = np.radians(np.arange(0,360,delta))
     nphi = len(phi)
 
     Eabs = table[:,2].reshape((nphi,-1))
-    theta = np.radians(np.arange(0,90+delta,delta))
-    ntheta = len(theta)
     
-    return Eabs[:,:ntheta], theta, phi
+    return Eabs, theta, phi
 
 
 if __name__=='__main__':
