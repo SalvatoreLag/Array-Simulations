@@ -4,8 +4,9 @@ import matplotlib.pyplot as plt
 import map_functions as mf
 
 # Define array
-Nx = 4
-Ny = 2
+Nx = 15
+Ny = 7
+N = 10
 
 # Element pattern
 filename = './ElementPatterns/Farfield120_5GHz.txt'
@@ -24,17 +25,17 @@ for idx,dx in enumerate(spacings):
     Aelem = (E**2)*A
     directivities1[idx] = af.numerical_directivity(Aelem,theta,phi)
 
-    p = af.hex_positions(3,dx)
+    p = af.hex_positions(10,dx)
     A = af.array_pattern_grid(theta,phi,0,0,p)
     Aelem = (E**2)*A
     directivities2[idx] = af.numerical_directivity(Aelem,theta,phi)
 
 Aeff1 = directivities1/4/np.pi
-Aenc1 = 3*spacings*1*spacings
-Ael = 8*Delem/4/np.pi
+Aenc1 = (Nx-1)*spacings*(Ny-1)*spacings
+Ael = Nx*Ny*Delem/4/np.pi
 
 Aeff2 = directivities2/4/np.pi
-Aenc2 = 3*spacings*np.sqrt(3)*spacings
+Aenc2 = N*spacings*N*np.sqrt(3)*spacings
 
 fig = plt.figure(figsize=(8,6))
 ax = fig.add_subplot()
