@@ -44,7 +44,7 @@ u0,v0,_ = hp.pix2vec(nside,scan_pixels)
 # Imaging
 dirty_img = np.zeros(len(scan_pixels))
 for idx,pix in enumerate(scan_pixels):
-    A = af.array_pattern_loop(nside,sky_pixels,np.atleast_1d(pix),p)
+    A = af.array_pattern(nside,sky_pixels,np.atleast_1d(pix),p)
     dirty_img[np.atleast_1d(idx)] = (E*A)@seen_img
 
 # Plot dirty image

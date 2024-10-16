@@ -110,7 +110,7 @@ def array_pattern_matrix(nside:int,source_pixels:np.ndarray,scan_pixels:np.ndarr
     return A
 
 
-def array_pattern_loop(nside:int,source_pixels:np.ndarray,scan_pixel:np.ndarray,positions:np.ndarray) -> np.ndarray:
+def array_pattern(nside:int,source_pixels:np.ndarray,scan_pixel:np.ndarray,positions:np.ndarray) -> np.ndarray:
     """
     Compute the array pattern steered in specific direction,
     using the healpix format.
