@@ -1,5 +1,4 @@
-import array_beam as ab
-import array_positions as ap
+import array_functions as af
 import numpy as np
 import healpy as hp
 import matplotlib.pyplot as plt
@@ -7,7 +6,7 @@ import matplotlib.pyplot as plt
 # Array and stations
 N = 5
 diameter = 0.9
-p = ap.hex_positions(N,diameter)
+p = af.hex_positions(N,diameter)
 nStations = 36
 stationRots = np.radians(np.linspace(0,180,nStations))
 
@@ -30,7 +29,7 @@ for idx,psi in enumerate(stationRots):
     R = np.array([[np.cos(psi),-np.sin(psi)],
                   [np.sin(psi), np.cos(psi)]]).T
     pRot = p@R
-    A[idx,:] = ab.array_pattern_loop(nside,sky_pixels,scan_pixel,pRot)
+    A[idx,:] = af.array_pattern_loop(nside,sky_pixels,scan_pixel,pRot)
 
 # Correlation between stations and PSF
 Beams = np.zeros((nStations**2,nPixels))

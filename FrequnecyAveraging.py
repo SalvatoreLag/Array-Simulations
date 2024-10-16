@@ -1,5 +1,4 @@
-import array_beam as ab
-import array_positions as ap
+import array_functions as af
 import numpy as np
 import healpy as hp
 import matplotlib.pyplot as plt
@@ -29,8 +28,8 @@ fs = np.linspace(1-BW_norm/2,1+BW_norm/2,nf)
 
 A = np.zeros((nf,nPixels))
 for idx, f in enumerate(fs):
-    p = ap.hex_positions(N,f)
-    A[idx,:] = ab.array_pattern_loop(nside,sky_pixels,scan_pixel,p)
+    p = af.hex_positions(N,f)
+    A[idx,:] = af.array_pattern_loop(nside,sky_pixels,scan_pixel,p)
 Beam = np.mean(A,0)
 
 # Plot

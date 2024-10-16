@@ -1,15 +1,12 @@
-import array_positions as ap
-import array_beam as ab
+import array_functions as af
 import healpy as hp
 import numpy as np
 import matplotlib.pyplot as plt
 
 # Array
 N = 5
-diameter = 0.9
-f0 = 5e9
-l0 = 3e8/f0
-p = ap.hex_positions(N,diameter)
+d = 0.9
+p = af.hex_positions(N,d)
 
 # Get clean image
 filename = './CleanImages/LowRes3.txt'
@@ -39,14 +36,15 @@ filename = './HealpixPatterns/Farfield120_5GHz.txt'
 E = np.loadtxt(filename)
 E = E[sky_pixels]
 
-# Define scanning space and imaging
+# Define scanning space
 scan_fov = np.radians(30)
 scan_pixels = hp.query_disc(nside,sky_center,scan_fov)
 u0,v0,_ = hp.pix2vec(nside,scan_pixels)
 
+# Imaging
 dirty_img = np.zeros(len(scan_pixels))
 for idx,pix in enumerate(scan_pixels):
-    A = ab.array_pattern_loop(nside,sky_pixels,np.atleast_1d(pix),p)
+    A = af.array_pattern_loop(nside,sky_pixels,np.atleast_1d(pix),p)
     dirty_img[np.atleast_1d(idx)] = (E*A)@seen_img
 
 # Plot dirty image
