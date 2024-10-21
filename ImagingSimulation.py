@@ -55,7 +55,7 @@ u0,v0,_ = hp.pix2vec(nside,scan_pixels)
 # Imaging
 dirty_img = np.zeros(len(scan_pixels))
 for idx,pix in enumerate(scan_pixels):
-    A = af.array_pattern(nside,sky_pixels,np.atleast_1d(pix),p)
+    A = np.abs(af.array_factor(nside,sky_pixels,np.atleast_1d(pix),p))**2
     dirty_img[np.atleast_1d(idx)] = A@apparent_sky
 
 # Plot dirty image

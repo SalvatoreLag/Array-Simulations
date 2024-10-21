@@ -64,7 +64,7 @@ def hex_positions(N:int,d:float=0.5) -> np.ndarray:
     return p
 
 
-def array_pattern_matrix(nside:int,source_pixels:np.ndarray,scan_pixels:np.ndarray,positions:np.ndarray) -> np.ndarray:
+def array_factor_matrix(nside:int,source_pixels:np.ndarray,scan_pixels:np.ndarray,positions:np.ndarray) -> np.ndarray:
     """
     Compute the array pattern steered in specific direction(s),
     using the healpix format
@@ -83,7 +83,7 @@ def array_pattern_matrix(nside:int,source_pixels:np.ndarray,scan_pixels:np.ndarr
     Returns 
     -------
     A: array_like 
-        array of steered array patterns.
+        matrix of complex steered array factors.
 
     Notes
     -----
@@ -104,13 +104,13 @@ def array_pattern_matrix(nside:int,source_pixels:np.ndarray,scan_pixels:np.ndarr
     # Repeat each steering direction to match the dimension of the source matrix
     S0 = np.repeat(S0,nsource,axis=1)
 
-    A = np.abs(np.sum(np.exp(1j*2*np.pi*positions@(S-S0)),0))**2
+    A = np.sum(np.exp(2j*np.pi*positions@(S-S0)),0)
     A = A.reshape((nscan,nsource))
     
     return A
 
 
-def array_pattern(nside:int,source_pixels:np.ndarray,scan_pixel:np.ndarray,positions:np.ndarray) -> np.ndarray:
+def array_factor(nside:int,source_pixels:np.ndarray,scan_pixel:np.ndarray,positions:np.ndarray) -> np.ndarray:
     """
     Compute the array pattern steered in specific direction,
     using the healpix format.
@@ -129,7 +129,7 @@ def array_pattern(nside:int,source_pixels:np.ndarray,scan_pixel:np.ndarray,posit
     Returns 
     -------
     A: array_like 
-        array containing the healpix map of the array pattern steered 
+        array containing the complex healpix map of array factor steered  
         in direction specified by scan_pixel. 
 
     Notes
@@ -143,12 +143,12 @@ def array_pattern(nside:int,source_pixels:np.ndarray,scan_pixel:np.ndarray,posit
     s0x,s0y,_ = hp.pix2vec(nside,scan_pixel)
     S0 = np.stack((s0x,s0y))
 
-    A = np.abs(np.sum(np.exp(1j*2*np.pi*positions@(S-S0)),0))**2
+    a= np.sum(np.exp(2j*np.pi*positions@(S-S0)),0)
     
-    return A
+    return a
 
 
-def array_pattern_grid(theta:np.ndarray,phi:np.ndarray,theta0:float,phi0:float,positions:np.ndarray) -> np.ndarray:
+def array_factor_grid(theta:np.ndarray,phi:np.ndarray,theta0:float,phi0:float,positions:np.ndarray) -> np.ndarray:
     """
     Compute the array pattern steered in specific direction,
     on a theta-phi grid.
@@ -182,7 +182,7 @@ def array_pattern_grid(theta:np.ndarray,phi:np.ndarray,theta0:float,phi0:float,p
     S = hp.ang2vec(t,p)[:,:2].T
     S0 = hp.ang2vec(np.atleast_1d(theta0),np.atleast_1d(phi0))[:,:2].T
 
-    A = np.abs(np.sum(np.exp(1j*2*np.pi*positions@(S-S0)),0))**2
+    A = np.sum(np.exp(2j*np.pi*positions@(S-S0)),0)
     
     return A.reshape((nphi,ntheta))
 

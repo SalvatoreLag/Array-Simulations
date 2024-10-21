@@ -21,13 +21,13 @@ directivities1 = np.zeros(nspacings)
 directivities2 = np.zeros(nspacings)
 for idx,dx in enumerate(spacings):
     p = af.upa_positions(Nx,Ny,dx,dx)
-    A = af.array_pattern_grid(theta,phi,0,0,p)
-    Aelem = (E**2)*A
+    a = af.array_factor_grid(theta,phi,0,0,p)
+    Aelem = (E**2)*(np.abs(a)**2)
     directivities1[idx] = af.numerical_directivity(Aelem,theta,phi)
 
     p = af.hex_positions(10,dx)
-    A = af.array_pattern_grid(theta,phi,0,0,p)
-    Aelem = (E**2)*A
+    a = af.array_factor_grid(theta,phi,0,0,p)
+    Aelem = (E**2)*(np.abs(a)**2)
     directivities2[idx] = af.numerical_directivity(Aelem,theta,phi)
 
 Aeff1 = directivities1/4/np.pi

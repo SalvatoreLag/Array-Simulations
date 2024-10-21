@@ -20,7 +20,7 @@ Ehalf = E[:,:91]
 theta_half = theta[:91]
 
 # Numerical directivity
-A = af.array_pattern_grid(theta,phi,0,0,p)
+A = np.abs(af.array_factor_grid(theta,phi,0,0,p))**2
 D2 = af.numerical_directivity(A,theta,phi)
 print(10*np.log10(D2))
 
@@ -41,7 +41,7 @@ directivities1 = np.zeros(nspacings)
 directivities2 = np.zeros(nspacings)
 for idx,dx in enumerate(spacings):
     p = af.upa_positions(Nx,1,dx,0)
-    A = af.array_pattern_grid(theta,phi,0,0,p)
+    A = np.abs(af.array_factor_grid(theta,phi,0,0,p))**2
     Aelem = (E**2)*A
     
     directivities1[idx] = 10*np.log10(af.numerical_directivity(A,theta,phi))
