@@ -34,13 +34,13 @@ for idx,psi in enumerate(stationRots):
 
 # Correlation between stations and PSF
 station_beams = sp.khatri_rao(a,np.conj(a))
-PSF = np.mean(station_beams,0)
+average_beam = np.mean(station_beams,0)
 
 # Plot PSF
-PSF_plot = 10*np.log10(np.abs(PSF))-10*np.log10(np.max(np.abs(PSF)))
+beam_plot = 10*np.log10(average_beam)-10*np.log10(np.max(average_beam))
 fig = plt.figure(figsize=(8,6))
 ax = fig.add_subplot()
-im = ax.tripcolor(u,v,PSF_plot,vmin=-40)
+im = ax.tripcolor(u,v,beam_plot,vmin=-40)
 ax.axis('equal')
 ax.set(xlim=(-1,1),ylim=(-1,1))
 ax.set_xlabel('u [-]')
