@@ -4,7 +4,7 @@ import healpy as hp
 import matplotlib.pyplot as plt
 
 # Array and stations
-N = 5
+N = 8
 diameter = 0.9
 
 # Define visible space
@@ -22,7 +22,7 @@ scan_pixel = np.atleast_1d(hp.ang2pix(nside,theta0,phi0))
 
 # Frequency averaging array beam
 f0 = 5e9
-BW_norm = 0.5e9/f0
+BW_norm = 1e9/f0
 nf = 21
 fs = np.linspace(1-BW_norm/2,1+BW_norm/2,nf)
 
@@ -36,7 +36,7 @@ Beam = np.mean(A,0)
 Beam_plot = 10*np.log10(Beam)-10*np.log10(np.max(Beam))
 fig = plt.figure(figsize=(8,6))
 ax = fig.add_subplot()
-im = ax.tripcolor(u,v,Beam_plot,vmin=-40)
+im = ax.tripcolor(u,v,Beam_plot,vmin=-30,cmap='turbo')
 ax.axis('equal')
 ax.set(xlim=(-1,1),ylim=(-1,1))
 ax.set_xlabel('u [-]')

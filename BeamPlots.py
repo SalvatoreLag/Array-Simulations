@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import map_functions as mf
 
 # Array
-N = 5
+N = 8
 d = 0.9
 p = af.hex_positions(N,d)
 
@@ -32,7 +32,7 @@ V = np.sin(T)*np.sin(P)
 E_plot = 20*np.log10(Ehalf/np.max(Ehalf))
 fig = plt.figure(figsize=(8,6))
 ax = fig.add_subplot()
-im = ax.pcolor(U,V,E_plot)
+im = ax.pcolor(U,V,E_plot,vmin=-30,cmap='turbo')
 ax.axis('equal')
 ax.set(xlim=(-1,1),ylim=(-1,1))
 ax.set_xlabel('u [-]')
@@ -51,7 +51,7 @@ A_grid = np.abs(af.array_factor_grid(theta_half,phi,theta0,phi0,p))**2
 A_plot = 10*np.log10(A_grid/np.max(A_grid))
 fig = plt.figure(figsize=(8,6))
 ax = fig.add_subplot()
-im = ax.pcolor(U,V,A_plot,vmin=-40)
+im = ax.pcolor(U,V,A_plot,vmin=-30,cmap='turbo')
 ax.axis('equal')
 ax.set(xlim=(-1,1),ylim=(-1,1))
 ax.set_xlabel('u [-]')
@@ -65,7 +65,7 @@ A_elem = (Ehalf**2)*A_grid
 A_plot = 10*np.log10(A_elem/np.max(A_elem))
 fig = plt.figure(figsize=(8,6))
 ax = fig.add_subplot()
-im = ax.pcolor(U,V,A_plot,vmin=-40)
+im = ax.pcolor(U,V,A_plot,vmin=-30,cmap='turbo')
 ax.axis('equal')
 ax.set(xlim=(-1,1),ylim=(-1,1))
 ax.set_xlabel('u [-]')
@@ -92,7 +92,7 @@ A_matrix = np.abs(af.array_factor_matrix(nside,sky_pixels,scan_pixels,p))**2
 A_plot = 10*np.log10(A_matrix[0,:])-10*np.log10(max(A_matrix[0,:]))
 fig = plt.figure(figsize=(8,6))
 ax = fig.add_subplot()
-im = ax.tripcolor(u,v,A_plot,vmin=-40)
+im = ax.tripcolor(u,v,A_plot,vmin=-30,cmap='turbo')
 ax.axis('equal')
 ax.set(xlim=(-1,1),ylim=(-1,1))
 ax.set_xlabel('u [-]')
@@ -109,7 +109,7 @@ A_elem = (E**2)*A_matrix[0,:]
 A_plot = 10*np.log10(A_elem/np.max(A_elem))
 fig = plt.figure(figsize=(8,6))
 ax = fig.add_subplot()
-im = ax.tripcolor(u,v,A_plot,vmin=-40)
+im = ax.tripcolor(u,v,A_plot,vmin=-30,cmap='turbo')
 ax.axis('equal')
 ax.set(xlim=(-1,1),ylim=(-1,1))
 ax.set_xlabel('u [-]')
