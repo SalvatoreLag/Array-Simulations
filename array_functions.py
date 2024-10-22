@@ -143,7 +143,7 @@ def array_factor(nside:int,source_pixels:np.ndarray,scan_pixel:np.ndarray,positi
     s0x,s0y,_ = hp.pix2vec(nside,scan_pixel)
     S0 = np.stack((s0x,s0y))
 
-    a= np.sum(np.exp(2j*np.pi*positions@(S-S0)),0)
+    a = np.sum(np.exp(2j*np.pi*positions@(S-S0)),0)
     
     return a
 
@@ -182,9 +182,9 @@ def array_factor_grid(theta:np.ndarray,phi:np.ndarray,theta0:float,phi0:float,po
     S = hp.ang2vec(t,p)[:,:2].T
     S0 = hp.ang2vec(np.atleast_1d(theta0),np.atleast_1d(phi0))[:,:2].T
 
-    A = np.sum(np.exp(2j*np.pi*positions@(S-S0)),0)
+    a = np.sum(np.exp(2j*np.pi*positions@(S-S0)),0)
     
-    return A.reshape((nphi,ntheta))
+    return a.reshape((nphi,ntheta))
 
 
 def linear_directivity(a:np.ndarray,d:float) -> float:
