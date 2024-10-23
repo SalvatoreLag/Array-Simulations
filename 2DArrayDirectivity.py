@@ -22,12 +22,12 @@ directivities1 = np.zeros(nspacings)
 directivities2 = np.zeros(nspacings)
 for idx,dx in enumerate(spacings):
     p = af.upa_positions(Nx,Ny,dx,dx)
-    a = af.array_factor_grid(theta,phi,0,0,p)
+    a = af.array_factor_tpgrid(theta,phi,0,0,p)
     Aelem = (E**2)*(np.abs(a)**2)
     directivities1[idx] = af.numerical_directivity(Aelem,theta,phi)
 
     p = af.hex_positions(10,dx)
-    a = af.array_factor_grid(theta,phi,0,0,p)
+    a = af.array_factor_tpgrid(theta,phi,0,0,p)
     Aelem = (E**2)*(np.abs(a)**2)
     directivities2[idx] = af.numerical_directivity(Aelem,theta,phi)
 
@@ -92,12 +92,12 @@ for i,tup in enumerate(zip(FoVs,ds)):
     for j in range(iterations):
         p = af.hex_positions(N=j+3,d=tup[1])
         Js_hex[j] = p.shape[0]
-        Apattern = E*np.abs(af.array_factor_grid(theta,phi,0,0,p))**2
+        Apattern = E*np.abs(af.array_factor_tpgrid(theta,phi,0,0,p))**2
         directivity = af.numerical_directivity(Apattern,theta,phi)
         areas_hex[i,j] = directivity/4/np.pi*l0**2
         p = af.upa_positions(Nx=j+3,Ny=j+3,dx=tup[1],dy=tup[1])
         Js_rec[j] = p.shape[0]
-        Apattern = E*np.abs(af.array_factor_grid(theta,phi,0,0,p))**2
+        Apattern = E*np.abs(af.array_factor_tpgrid(theta,phi,0,0,p))**2
         directivity = af.numerical_directivity(Apattern,theta,phi)
         areas_rec[i,j] = directivity/4/np.pi*l0**2
 

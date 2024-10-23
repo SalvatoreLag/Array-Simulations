@@ -66,7 +66,7 @@ def hex_positions(N:int,d:float=0.5) -> np.ndarray:
 
 def array_factor_matrix(nside:int,source_pixels:np.ndarray,scan_pixels:np.ndarray,positions:np.ndarray) -> np.ndarray:
     """
-    Compute the array pattern steered in specific direction(s),
+    Compute the array factor steered in specific direction(s),
     using the healpix format
 
     Parameters
@@ -87,7 +87,7 @@ def array_factor_matrix(nside:int,source_pixels:np.ndarray,scan_pixels:np.ndarra
 
     Notes
     -----
-    This implementation computes the steered array pattern for all 
+    This implementation computes the steered array factor for all 
     steering directions in one matrix computation. Each row in the output
     array is a healpix map for a different steering direction.
     """
@@ -112,7 +112,7 @@ def array_factor_matrix(nside:int,source_pixels:np.ndarray,scan_pixels:np.ndarra
 
 def array_factor(nside:int,source_pixels:np.ndarray,scan_pixel:np.ndarray,positions:np.ndarray) -> np.ndarray:
     """
-    Compute the array pattern steered in specific direction,
+    Compute the array factor steered in specific direction,
     using the healpix format.
 
     Parameters
@@ -134,7 +134,7 @@ def array_factor(nside:int,source_pixels:np.ndarray,scan_pixel:np.ndarray,positi
 
     Notes
     -----
-    This implementation computes the steered array pattern for one
+    This implementation computes the steered array factor for one
     steering direction. Call this in a loop for multiple directions.
     """
     
@@ -148,9 +148,9 @@ def array_factor(nside:int,source_pixels:np.ndarray,scan_pixel:np.ndarray,positi
     return a
 
 
-def array_factor_grid(theta:np.ndarray,phi:np.ndarray,theta0:float,phi0:float,positions:np.ndarray) -> np.ndarray:
+def array_factor_tpgrid(theta:np.ndarray,phi:np.ndarray,theta0:float,phi0:float,positions:np.ndarray) -> np.ndarray:
     """
-    Compute the array pattern steered in specific direction,
+    Compute the array factor steered in specific direction,
     on a theta-phi grid.
 
     Parameters
@@ -169,7 +169,7 @@ def array_factor_grid(theta:np.ndarray,phi:np.ndarray,theta0:float,phi0:float,po
     Returns 
     -------
     A: array_like 
-        theta-phi matrix containing the array pattern steered 
+        theta-phi matrix containing the complex array factor steered 
         in direction specified by theta0 and phi0. 
     """
 
@@ -185,6 +185,45 @@ def array_factor_grid(theta:np.ndarray,phi:np.ndarray,theta0:float,phi0:float,po
     a = np.sum(np.exp(2j*np.pi*positions@(S-S0)),0)
     
     return a.reshape((nphi,ntheta))
+
+
+def array_factor_lmgrid(l:np.ndarray,m:np.ndarray,l0:float,m0:float,positions:np.ndarray) -> np.ndarray:
+    """
+    Compute the array factor steered in specific direction,
+    on an l-m grid.
+
+    Parameters
+    ----------
+    l: array_like
+        direction cosines where to compute the array pattern.
+    m: array_like
+        direction cosines where to compute the array pattern.
+    l0: float
+        direction cosine of steering direction.
+    m0: float
+        direction cosine of steering direction.
+    positions: array_like
+        (Nelem,2) matrix of normalized element positions.
+
+    Returns 
+    -------
+    A: array_like 
+        l-m matrix containing the complex array factor steered 
+        in direction specified by l0 and m0. 
+    """
+
+    nl = len(l)
+    nm = len(m)
+    L,M = np.meshgrid(l,m)
+    ll = L.reshape(nl*nm)
+    mm = M.reshape(nl*nm)
+
+    S = np.stack((ll,mm))
+    S0 = np.stacl((np.atleast_1d(l0),np.atleast_1d(m0)))
+
+    a = np.sum(np.exp(2j*np.pi*positions@(S-S0)),0)
+    
+    return a.reshape((nm,nl))
 
 
 def linear_directivity(a:np.ndarray,d:float) -> float:

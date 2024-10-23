@@ -46,7 +46,7 @@ theta0 = np.radians(90)
 phi0 = np.radians(0)
 
 # Compute steered array pattern 
-A_grid = np.abs(af.array_factor_grid(theta_half,phi,theta0,phi0,p))**2
+A_grid = np.abs(af.array_factor_tpgrid(theta_half,phi,theta0,phi0,p))**2
 
 A_plot = 10*np.log10(A_grid/np.max(A_grid))
 fig = plt.figure(figsize=(8,6))
