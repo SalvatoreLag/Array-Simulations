@@ -43,7 +43,7 @@ def hex_positions(N:int,d:float=0.5) -> np.ndarray:
     Returns 
     -------
     p: array_like 
-        matrix of element positions.
+        (J,2) matrix of element positions.
 
     Notes
     -----
@@ -140,7 +140,7 @@ def array_factor(nside:int,source_pixels:np.ndarray,scan_pixel:np.ndarray,positi
     
     sx,sy,_ = hp.pix2vec(nside,source_pixels)
     S = np.stack((sx,sy))
-    s0x,s0y,_ = hp.pix2vec(nside,scan_pixel)
+    s0x,s0y,_ = hp.pix2vec(nside,np.atleast_1d(scan_pixel))
     S0 = np.stack((s0x,s0y))
 
     a = np.sum(np.exp(2j*np.pi*positions@(S-S0)),0)
@@ -219,7 +219,7 @@ def array_factor_lmgrid(l:np.ndarray,m:np.ndarray,l0:float,m0:float,positions:np
     mm = M.reshape(nl*nm)
 
     S = np.stack((ll,mm))
-    S0 = np.stacl((np.atleast_1d(l0),np.atleast_1d(m0)))
+    S0 = np.stack((np.atleast_1d(l0),np.atleast_1d(m0)))
 
     a = np.sum(np.exp(2j*np.pi*positions@(S-S0)),0)
     
