@@ -1,4 +1,5 @@
 import numpy as np
+import scipy as sp
 import array_functions as af
 import matplotlib.pyplot as plt
 import map_functions as mf
@@ -46,7 +47,6 @@ ax.grid()
 ax.legend()
 ax.set_xlabel('normalized spacing [-]')
 ax.set_ylabel('normalized effective area [-]')
-ax.set_title('Rectangular grid')
 plt.savefig('./Outputs/AreaVsSpacingRect.png')
 
 fig = plt.figure(figsize=(8,6))
@@ -58,7 +58,6 @@ ax.grid()
 ax.legend()
 ax.set_xlabel('normalized spacing [-]')
 ax.set_ylabel('normalized effective area [-]')
-ax.set_title('Hexagonal grid')
 plt.savefig('./Outputs/AreaVsSpacingHex.png')
 
 fig = plt.figure(figsize=(8,6))
@@ -69,5 +68,49 @@ ax.grid()
 ax.legend()
 ax.set_xlabel('normalized spacing [-]')
 ax.set_ylabel('normalized effective area [-]')
-ax.set_title('Comparison')
 plt.savefig('./Outputs/AreaVsSpacingComparison.png')
+
+# Area vs Number of elements
+f0 = 6
+l0 = sp.constants.c/(f0*1e9)
+
+iterations = 20
+areas_rec = np.zeros((3,iterations))
+areas_hex = np.zeros((3,iterations))
+Js_rec = np.zeros(iterations)
+Js_hex = np.zeros(iterations)
+
+FoVs = [60,90,120]
+ds = [1.6,1.12,0.9]
+
+for i,tup in enumerate(zip(FoVs,ds)):
+    filename = f'./ElementPatterns/Farfield{tup[0]}_{f0}GHz.txt'
+    E, theta, phi = mf.import_pattern(filename,1)
+    E = E**2
+    Delem = af.numerical_directivity(E**2,theta,phi)
+    print(f'Element directivity: {10*np.log10(Delem)} dB')
+    for j in range(iterations):
+        p = af.hex_positions(N=j+3,d=tup[1])
+        Js_hex[j] = p.shape[0]
+        Apattern = E*np.abs(af.array_factor_grid(theta,phi,0,0,p))**2
+        directivity = af.numerical_directivity(Apattern,theta,phi)
+        areas_hex[i,j] = directivity/4/np.pi*l0**2
+        p = af.upa_positions(Nx=j+3,Ny=j+3,dx=tup[1],dy=tup[1])
+        Js_rec[j] = p.shape[0]
+        Apattern = E*np.abs(af.array_factor_grid(theta,phi,0,0,p))**2
+        directivity = af.numerical_directivity(Apattern,theta,phi)
+        areas_rec[i,j] = directivity/4/np.pi*l0**2
+
+fig = plt.figure()
+ax = fig.add_subplot()
+ax.plot(Js_hex,areas_hex[0,:],label=f'd={ds[0]},hexagonal',ls='-',color='blue')
+ax.plot(Js_rec,areas_rec[0,:],label=f'd={ds[0]},rectangular',ls='--',color='blue')
+ax.plot(Js_hex,areas_hex[1,:],label=f'd={ds[1]},hexagonal',ls='-',color='orange')
+ax.plot(Js_rec,areas_rec[1,:],label=f'd={ds[1]},rectangular',ls='--',color='orange')
+ax.plot(Js_hex,areas_hex[2,:],label=f'd={ds[2]},hexagonal',ls='-',color='green')
+ax.plot(Js_rec,areas_rec[2,:],label=f'd={ds[2]},rectangular',ls='--',color='green')
+ax.grid()
+ax.set_xlabel('Number of elements [-]')
+ax.set_ylabel('Effective area [m^2]')
+ax.legend()
+plt.savefig(f'./Outputs/AreaVsNumberComparison{f0}.png')
