@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Array
-N = 5
+N = 10
 d = 0.9
 p = af.hex_positions(N,d)
 
@@ -48,14 +48,14 @@ fig.colorbar(im,ax=ax)
 plt.savefig('./Outputs/apparentSky_uv.png')
 
 # Define scanning space
-scan_fov = np.radians(30)
+scan_fov = np.radians()
 scan_pixels = hp.query_disc(nside,sky_center,scan_fov)
 u0,v0,_ = hp.pix2vec(nside,scan_pixels)
 
 # Imaging
 dirty_img = np.zeros(len(scan_pixels))
 for idx,pix in enumerate(scan_pixels):
-    A = np.abs(af.array_factor(nside,sky_pixels,np.atleast_1d(pix),p))**2
+    A = np.abs(af.array_factor_hp(nside,sky_pixels,np.atleast_1d(pix),p))**2
     dirty_img[np.atleast_1d(idx)] = A@apparent_sky
 
 # Plot dirty image

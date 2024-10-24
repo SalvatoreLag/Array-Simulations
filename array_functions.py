@@ -64,7 +64,7 @@ def hex_positions(N:int,d:float=0.5) -> np.ndarray:
     return p
 
 
-def array_factor_matrix(nside:int,source_pixels:np.ndarray,scan_pixels:np.ndarray,positions:np.ndarray) -> np.ndarray:
+def array_factor_hpmatrix(nside:int,source_pixels:np.ndarray,scan_pixels:np.ndarray,positions:np.ndarray) -> np.ndarray:
     """
     Compute the array factor steered in specific direction(s),
     using the healpix format
@@ -110,7 +110,7 @@ def array_factor_matrix(nside:int,source_pixels:np.ndarray,scan_pixels:np.ndarra
     return A
 
 
-def array_factor(nside:int,source_pixels:np.ndarray,scan_pixel:np.ndarray,positions:np.ndarray) -> np.ndarray:
+def array_factor_hp(nside:int,source_pixels:np.ndarray,scan_pixel:np.ndarray,positions:np.ndarray) -> np.ndarray:
     """
     Compute the array factor steered in specific direction,
     using the healpix format.

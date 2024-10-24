@@ -11,6 +11,7 @@ p = af.hex_positions(N,d)
 
 f0 = 5e9
 l0 = 3e8/f0
+
 fig = plt.figure(figsize=(8,6))
 ax = fig.add_subplot()
 ax.scatter(p[:,0]*l0,p[:,1]*l0)
@@ -86,7 +87,7 @@ scan_fov = 30
 scan_pixels = np.atleast_1d(hp.ang2pix(nside,theta0,phi0)) #np.atleast_1d(hp.query_disc(nside,sky_center,scan_fov))
 
 # Get matrix of steered beams
-A_matrix = np.abs(af.array_factor_matrix(nside,sky_pixels,scan_pixels,p))**2
+A_matrix = np.abs(af.array_factor_hpmatrix(nside,sky_pixels,scan_pixels,p))**2
 
 # Plot normalized steered beam
 A_plot = 10*np.log10(A_matrix[0,:])-10*np.log10(max(A_matrix[0,:]))

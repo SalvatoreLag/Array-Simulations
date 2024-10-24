@@ -29,7 +29,7 @@ fs = np.linspace(1-BW_norm/2,1+BW_norm/2,nf)
 A = np.zeros((nf,nPixels))
 for idx, f in enumerate(fs):
     p = af.hex_positions(N,f)
-    A[idx,:] = np.abs(af.array_factor(nside,sky_pixels,scan_pixel,p))**2
+    A[idx,:] = np.abs(af.array_factor_hp(nside,sky_pixels,scan_pixel,p))**2
 Beam = np.mean(A,0)
 
 # Plot
