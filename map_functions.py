@@ -1,5 +1,6 @@
 import numpy as np
 import healpy as hp
+import matplotlib.pyplot as plt
 
 
 def CSTmap2healpix(in_filename:str,nside_out:int) -> np.ndarray:
@@ -80,6 +81,35 @@ def import_pattern(filename:str,delta:float) -> np.ndarray:
     Eabs = table[:,2].reshape((nphi,-1))
     
     return Eabs, theta, phi
+
+
+def dB_hpPlot(x,y,z,ax):
+    z_dB = 10*np.log10(z/np.max(z))
+    im = ax.tripcolor(x,y,z_dB,vmin=-30,cmap='turbo')
+    ax.axis('equal')
+    ax.set(xlim=(-1,1),ylim=(-1,1))
+    ax.set_xlabel('l [-]')
+    ax.set_ylabel('m [-]')
+    plt.colorbar(im,ax=ax)
+
+
+def hpPlot(x,y,z,ax):
+    im = ax.tripcolor(x,y,z)
+    ax.axis('equal')
+    ax.set(xlim=(-1,1),ylim=(-1,1))
+    ax.set_xlabel('l [-]')
+    ax.set_ylabel('m [-]')
+    plt.colorbar(im,ax=ax)
+
+
+def dB_pcolor(X,Y,Z,ax):
+    z_dB = 10*np.log10(z/np.max(z))
+    im = ax.pcolor(x,y,z_dB,vmin=-30,cmap='turbo')
+    ax.axis('equal')
+    ax.set(xlim=(-1,1),ylim=(-1,1))
+    ax.set_xlabel('l [-]')
+    ax.set_ylabel('m [-]')
+    plt.colorbar(im,ax=ax)
 
 
 if __name__=='__main__':
