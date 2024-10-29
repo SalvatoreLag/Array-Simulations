@@ -71,16 +71,16 @@ def array_manifold(l:np.ndarray,m:np.ndarray,positions:np.ndarray) -> np.ndarray
     Parameters
     ----------
     l: array-like
-        (1xP) array of direction cosines.
+        (1,P) array of direction cosines.
     m: array_like
-        (1xP) array of direction cosines.
+        (1,P) array of direction cosines.
     p: array_like
-        (Jx2) array of sensing element positions.
+        (J,2) array of sensing element normalized positions.
 
     Returns 
     -------
     A: array_like 
-        (JxP) array manifold.
+        (J,P) array manifold.
     """
     return np.exp(2j*np.pi*positions@(np.stack((l,m))))
 
@@ -99,12 +99,12 @@ def array_factor_hpmatrix(nside:int,source_pixels:np.ndarray,scan_pixels:np.ndar
     scan_pixels: array_like
         indices for the healpix pixels corresponding to steering directions.
     positions: array_like
-        (Nelem,2) matrix of normalized element positions.
+        (J,2) matrix of normalized element positions.
 
     Returns 
     -------
     A: array_like 
-        matrix of complex steered array factors.
+        (len(scan_pixels),len(source_pixels) matrix of complex steered array factors.
 
     Notes
     -----
@@ -115,7 +115,7 @@ def array_factor_hpmatrix(nside:int,source_pixels:np.ndarray,scan_pixels:np.ndar
     
     sx,sy,_ = hp.pix2vec(nside,source_pixels)
     S = np.stack((sx,sy))
-    s0x,s0y,_ = hp.pix2vec(nside,scan_pixels)
+    s0x,s0y,_ = hp.pix2vec(nside,np.atleast_1d(scan_pixels))
     S0 = np.stack((s0x,s0y))
 
     nsource = len(source_pixels)
@@ -145,7 +145,7 @@ def array_factor_hp(nside:int,source_pixels:np.ndarray,scan_pixel:np.ndarray,pos
     scan_pixel: array_like
         index for the pixel corresponding to steering direction.
     positions: array_like
-        (Nelem,2) matrix of normalized element positions.
+        (J,2) matrix of normalized element positions.
 
     Returns 
     -------
@@ -177,20 +177,20 @@ def array_factor_tp(theta:np.ndarray,phi:np.ndarray,theta0:float,phi0:float,posi
     Parameters
     ----------
     theta: array_like
-        Elevation angles in radians where to compute the array pattern.
+        Elevation angles in radians.
     phi: array_like
-        Azimuthal angles in radians where to compute the array pattern.
+        Azimuthal angles in radians.
     theta0: float
-        Elevation steering angle.
+        Elevation steering angle in radians.
     phi0: float
-        Azimuthal steering angle.
+        Azimuthal steering angle in radians.
     positions: array_like
-        (Nelem,2) matrix of normalized element positions.
+        (J,2) matrix of normalized element positions.
 
     Returns 
     -------
     a: array_like 
-        array containing the complex array factor steered 
+        (len(theta)*len(phi)) array containing the complex array factor steered 
         in direction specified by theta0 and phi0. 
     """
 
@@ -218,7 +218,7 @@ def array_factor_lm(l:np.ndarray,m:np.ndarray,l0:float,m0:float,positions:np.nda
     m0: float
         direction cosine of steering direction.
     positions: array_like
-        (Nelem,2) matrix of normalized element positions.
+        (J,2) matrix of normalized element positions.
 
     Returns 
     -------
@@ -245,7 +245,7 @@ def linear_directivity(a:np.ndarray,d:float) -> float:
     a: array_like
         array of tapering coefficients.
     d: float
-        element spacing.
+        element spacing in wavelengths.
 
     Returns 
     -------
@@ -277,11 +277,11 @@ def radiated_power(PowerPattern:np.ndarray,theta:np.ndarray,phi:np.ndarray) -> f
     ----------
     PowerPattern: array_like
         2D array of the radiated field with phi dependence on the 0th axis and
-        thtea dependence on the 1st axis.
+        theta dependence on the 1st axis.
     theta: array_like
-        elevation angles in radians where the radiated field is evaluated.
+        elevation angles in radians.
     phi: array_like
-        azimuth angles in radians where the radiated field is evaluated.
+        azimuth angles in radians.
 
     Returns 
     -------
@@ -302,12 +302,12 @@ def numerical_directivity(PowerPattern:np.ndarray,theta:np.ndarray,phi:np.ndarra
     Parameters
     ----------
     PowerPattern: array_like
-        2D array of the radiated field with phi dependence on the 0th axis and
-        thtea dependence on the 1st axis.
+        2D array of the radiated power with phi dependence on the 0th axis and
+        theta dependence on the 1st axis.
     theta: array_like
-        elevation angles in radians where the radiated field is evaluated.
+        elevation angles in radians.
     phi: array_like
-        azimuth angles in radians where the radiated field is evaluated.
+        azimuth angles in radians.
 
     Returns 
     -------
