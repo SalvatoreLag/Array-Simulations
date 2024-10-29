@@ -172,7 +172,7 @@ def array_factor_hp(nside:int,source_pixels:np.ndarray,scan_pixel:np.ndarray,pos
 def array_factor_tp(theta:np.ndarray,phi:np.ndarray,theta0:float,phi0:float,positions:np.ndarray) -> np.ndarray:
     """
     Compute the array factor steered in specific direction,
-    on a theta-phi grid.
+    on a flattened theta-phi grid.
 
     Parameters
     ----------
@@ -205,7 +205,7 @@ def array_factor_tp(theta:np.ndarray,phi:np.ndarray,theta0:float,phi0:float,posi
 def array_factor_lm(l:np.ndarray,m:np.ndarray,l0:float,m0:float,positions:np.ndarray) -> np.ndarray:
     """
     Compute the array factor steered in specific direction,
-    on an l-m grid.
+    on a flattened l-m grid.
 
     Parameters
     ----------
@@ -238,7 +238,7 @@ def array_factor_lm(l:np.ndarray,m:np.ndarray,l0:float,m0:float,positions:np.nda
 def linear_directivity(a:np.ndarray,d:float) -> float:
     """
     Compute the directivity for a uniform linear array with tapering a
-    and spacing d.
+    and spacing d using the analytical formula.
 
     Parameters
     ----------

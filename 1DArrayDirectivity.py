@@ -2,6 +2,9 @@ import numpy as np
 import array_functions as af
 import matplotlib.pyplot as plt
 import map_functions as mf
+import scienceplots
+
+plt.style.use(['science','ieee'])
 
 # Define array
 Nx = 10
@@ -16,12 +19,14 @@ print(10*np.log10(D1))
 # Element pattern
 filename = './ElementPatterns/Farfield120_5GHz.txt'
 E, theta, phi = mf.import_pattern(filename,1)
-Ehalf = E[:,:91]
-theta_half = theta[:91]
+T,P = np.meshgrid(theta,phi)
+tt = T.flatten()
+pp = P.flatten()
 
 # Numerical directivity
-A = np.abs(af.array_factor_tpgrid(theta,phi,0,0,p))**2
-D2 = af.numerical_directivity(A,theta,phi)
+A2 = np.abs(af.array_factor_tp(tt,pp,0,0,p))**2
+A2 = A2.reshape((len(phi),-1))
+D2 = af.numerical_directivity(A2,theta,phi)
 print(10*np.log10(D2))
 
 # Element directivity
@@ -29,8 +34,8 @@ D3 = af.numerical_directivity(E,theta,phi)
 print(10*np.log10(D3))
 
 # Array with real elements directivity
-Aelem = (E**2)*A
-D4 = af.numerical_directivity(Aelem,theta,phi)
+A4 = (E**2)*A2
+D4 = af.numerical_directivity(A4,theta,phi)
 print(10*np.log10(D4))
 
 # Different spacings plot
@@ -41,7 +46,8 @@ directivities1 = np.zeros(nspacings)
 directivities2 = np.zeros(nspacings)
 for idx,dx in enumerate(spacings):
     p = af.upa_positions(Nx,1,dx,0)
-    A = np.abs(af.array_factor_tpgrid(theta,phi,0,0,p))**2
+    A = np.abs(af.array_factor_tp(tt,pp,0,0,p))**2
+    A = A.reshape((len(phi),-1))
     Aelem = (E**2)*A
     
     directivities1[idx] = 10*np.log10(af.numerical_directivity(A,theta,phi))

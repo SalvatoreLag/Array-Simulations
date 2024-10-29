@@ -1,24 +1,24 @@
 import array_functions as af
 import numpy as np
-import healpy as hp
 import matplotlib.pyplot as plt
+import scienceplots
+
+plt.style.use(['science','ieee'])
 
 # Array and stations
 N = 8
-diameter = 0.9
+diameter = 1.6
 
-# Define visible space
-nside = 64
-sky_center = [0,0,1]    
-sky_fov = np.radians(90)
-sky_pixels = hp.query_disc(nside,sky_center,sky_fov)
-nPixels = len(sky_pixels)
-u,v,_ = hp.pix2vec(nside,sky_pixels)
+# Define pixels
+l = np.arange(-1,1.01,0.01)
+m = np.arange(-1,1.01,0.01)
+L,M = np.meshgrid(l,m)
+mask = np.where(L**2+M**2>1)
+ll = L.flatten()
+mm  = M.flatten()
 
-# Define scan angle
-theta0 = np.radians(45)
-phi0 = np.radians(45)
-scan_pixel = np.atleast_1d(hp.ang2pix(nside,theta0,phi0))
+l0 = 0.2
+m0 = 0.2
 
 # Frequency averaging array beam
 f0 = 5e9
@@ -26,20 +26,18 @@ BW_norm = 1e9/f0
 nf = 21
 fs = np.linspace(1-BW_norm/2,1+BW_norm/2,nf)
 
-A = np.zeros((nf,nPixels))
+A = np.zeros((nf,len(ll)))
 for idx, f in enumerate(fs):
-    p = af.hex_positions(N,f)
-    A[idx,:] = np.abs(af.array_factor_hp(nside,sky_pixels,scan_pixel,p))**2
+    p = af.hex_positions(N,f*diameter)
+    A[idx,:] = np.abs(af.array_factor_lm(ll,mm,l0,m0,p))**2
 Beam = np.mean(A,0)
+Beam = Beam.reshape((len(l),-1))
 
 # Plot
 Beam_plot = 10*np.log10(Beam)-10*np.log10(np.max(Beam))
-fig = plt.figure(figsize=(8,6))
-ax = fig.add_subplot()
-im = ax.tripcolor(u,v,Beam_plot,vmin=-30,cmap='turbo')
-ax.axis('equal')
-ax.set(xlim=(-1,1),ylim=(-1,1))
-ax.set_xlabel('u [-]')
-ax.set_ylabel('v [-]')
-fig.colorbar(im,ax=ax)
+Beam_plot[mask] = np.inf
+plt.pcolor(L,M,Beam_plot,cmap='turbo')
+plt.xlabel('l [-]')
+plt.ylabel('m [-]')
+plt.colorbar()
 plt.savefig('./Outputs/FrequencyAveraging.png')
