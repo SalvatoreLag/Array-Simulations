@@ -1,78 +1,85 @@
+#%%
 import array_functions as af
 import healpy as hp
 import numpy as np
 import matplotlib.pyplot as plt
 import map_functions as mf
+import scienceplots
 
-# Array
-N = 8
-d = 0.9
-p = af.hex_positions(N,d)
+plt.style.use(['science','ieee'])
 
-f0 = 5e9
-l0 = 3e8/f0
+#%% Arrays
+N = 10
+d = 1.1
+p2 = af.hex_positions(N,d)
+p1 = af.upa_positions(N,N,d,d)
 
-fig = plt.figure(figsize=(8,6))
-ax = fig.add_subplot()
-ax.scatter(p[:,0]*l0,p[:,1]*l0)
-ax.set_xlabel('x [m]')
-ax.set_ylabel('y [m]')
-plt.grid()
-plt.savefig('./Outputs/positions.png')
-
-# Element pattern
-filename = './ElementPatterns/Farfield120_5GHz.txt'
+#%% Element pattern
+filename = './ElementPatterns/Farfield90_5GHz.txt'
 E,theta,phi = mf.import_pattern(filename,1)
 half = 91
 theta_half = theta[:half]
 Ehalf = E[:,:half]
 T,P = np.meshgrid(theta_half,phi)
-U = np.sin(T)*np.cos(P)
-V = np.sin(T)*np.sin(P)
+L = np.sin(T)*np.cos(P)
+M = np.sin(T)*np.sin(P)
 
-E_plot = 20*np.log10(Ehalf/np.max(Ehalf))
-fig = plt.figure(figsize=(8,6))
-ax = fig.add_subplot()
-im = ax.pcolor(U,V,E_plot,vmin=-30,cmap='turbo')
-ax.axis('equal')
-ax.set(xlim=(-1,1),ylim=(-1,1))
-ax.set_xlabel('u [-]')
-ax.set_ylabel('v [-]')
-plt.colorbar(im,ax=ax)
-plt.savefig('./Outputs/ElementPattern.png')
+#%% Array pattern - Theta-phi grid approach
+theta0 = np.radians(20)
+phi0 = np.radians(125)
 
-# Array pattern - Theta-phi grid approach
-# Define steering angle
-theta0 = np.radians(90)
-phi0 = np.radians(0)
+tt = T.reshape(-1)
+pp = P.reshape(-1)
+Arec = np.abs(af.array_factor_tp(tt,pp,theta0,phi0,p1))**2
+Arec = Arec.reshape((len(phi),-1))
+Ahex = np.abs(af.array_factor_tp(tt,pp,theta0,phi0,p2))**2
+Ahex = Ahex.reshape((len(phi),-1))
 
-# Compute steered array pattern 
-A_grid = np.abs(af.array_factor_tpgrid(theta_half,phi,theta0,phi0,p))**2
+fig = plt.figure(figsize=(7.16,2.9))
+ax1,ax2 = fig.subplots(1,2)
 
-A_plot = 10*np.log10(A_grid/np.max(A_grid))
-fig = plt.figure(figsize=(8,6))
-ax = fig.add_subplot()
-im = ax.pcolor(U,V,A_plot,vmin=-30,cmap='turbo')
-ax.axis('equal')
-ax.set(xlim=(-1,1),ylim=(-1,1))
-ax.set_xlabel('u [-]')
-ax.set_ylabel('v [-]')
-plt.colorbar(im,ax=ax)
-plt.savefig('./Outputs/AsteeredGrid.png')
+img1 = ax1.pcolor(L,M,10*np.log10(Arec/np.max(Arec)),vmin=-30,cmap='turbo')
+ax1.set_xlabel('l [-]')
+ax1.set_ylabel('m [-]')
+ax1.set_xlim(-1,1)
+ax1.set_ylim(-1,1)
 
-# With real elements
-A_elem = (Ehalf**2)*A_grid
+img2 = ax2.pcolor(L,M,10*np.log10(Ahex/np.max(Ahex)),vmin=-30,cmap='turbo')
+ax2.set_xlabel('l [-]')
+ax2.set_ylabel('m [-]')
+ax2.set_xlim(-1,1)
+ax2.set_ylim(-1,1)
 
-A_plot = 10*np.log10(A_elem/np.max(A_elem))
-fig = plt.figure(figsize=(8,6))
-ax = fig.add_subplot()
-im = ax.pcolor(U,V,A_plot,vmin=-30,cmap='turbo')
-ax.axis('equal')
-ax.set(xlim=(-1,1),ylim=(-1,1))
-ax.set_xlabel('u [-]')
-ax.set_ylabel('v [-]')
-plt.colorbar(im,ax=ax)
-plt.savefig('./Outputs/AElementGrid.png')
+fig.colorbar(img1,ax=ax1)   
+fig.colorbar(img2,ax=ax2)
+fig.tight_layout()
+fig.savefig('./Outputs/ArrayPatterns.png')
+
+#%% With real elements
+Arec = (Ehalf**2)*Arec
+Ahex = (Ehalf**2)*Ahex
+
+fig = plt.figure(figsize=(7.16,2.9))
+ax1,ax2 = fig.subplots(1,2)
+
+img1 = ax1.pcolor(L,M,10*np.log10(Arec/np.max(Arec)),vmin=-30,cmap='turbo')
+ax1.set_xlabel('l [-]')
+ax1.set_ylabel('m [-]')
+ax1.set_xlim(-1,1)
+ax1.set_ylim(-1,1)
+
+img2 = ax2.pcolor(L,M,10*np.log10(Ahex/np.max(Ahex)),vmin=-30,cmap='turbo')
+ax2.set_xlabel('l [-]')
+ax2.set_ylabel('m [-]')
+ax2.set_xlim(-1,1)
+ax2.set_ylim(-1,1)
+
+fig.colorbar(img1,ax=ax1)   
+fig.colorbar(img2,ax=ax2)
+fig.tight_layout()
+fig.savefig('./Outputs/ArrayPatternsElements.png')
+
+#%%
 
 # Array pattern - Healpix approach
 # Define visible space
