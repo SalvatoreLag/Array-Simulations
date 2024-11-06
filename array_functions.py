@@ -29,15 +29,15 @@ def upa_positions(Nx:int,Ny: int,dx:float=0.5,dy:float=0.5) -> np.ndarray:
     return p
 
 
-def hex_positions(N:int,d:float=0.5) -> np.ndarray:
+def hex_positions(Nx:int,dx:float=0.5) -> np.ndarray:
     """   
     Compute positions  for elements in a regular hexagonal grid.
 
     Parameters
     ----------
-    N: int
+    Nx: int
         number of elements on the x axis.
-    d: float
+    dx: float
         element spacing in the x direction.
 
     Returns 
@@ -52,9 +52,7 @@ def hex_positions(N:int,d:float=0.5) -> np.ndarray:
     to obtain a configuration as close to a square as possible.
     """
     
-    dx = d
     dy = dx*np.sqrt(3)
-    Nx = N
     Ny = np.round(Nx/np.sqrt(3),decimals=0).astype(int)
 
     p1 = upa_positions(Nx,Ny,dx,dy)
@@ -276,7 +274,7 @@ def radiated_power(PowerPattern:np.ndarray,theta:np.ndarray,phi:np.ndarray) -> f
     Parameters
     ----------
     PowerPattern: array_like
-        2D array of the radiated field with phi dependence on the 0th axis and
+        2D array of the far field radiated power density with phi dependence on the 0th axis and
         theta dependence on the 1st axis.
     theta: array_like
         elevation angles in radians.
@@ -297,12 +295,12 @@ def radiated_power(PowerPattern:np.ndarray,theta:np.ndarray,phi:np.ndarray) -> f
 
 def numerical_directivity(PowerPattern:np.ndarray,theta:np.ndarray,phi:np.ndarray) -> float:
     """
-    Evaluate numerically the directivity of a radiation pattern.
+    Evaluate numerically the directivity of a far field radiation pattern.
 
     Parameters
     ----------
     PowerPattern: array_like
-        2D array of the radiated power with phi dependence on the 0th axis and
+        2D array of the far field radiated power with phi dependence on the 0th axis and
         theta dependence on the 1st axis.
     theta: array_like
         elevation angles in radians.

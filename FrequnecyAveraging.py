@@ -6,7 +6,7 @@ import scienceplots
 plt.style.use(['science','ieee'])
 
 # Array and stations
-N = 8
+N = 10
 diameter = 1.6
 
 # Define pixels
@@ -28,7 +28,7 @@ fs = np.linspace(1-BW_norm/2,1+BW_norm/2,nf)
 
 A = np.zeros((nf,len(ll)))
 for idx, f in enumerate(fs):
-    p = af.hex_positions(N,f*diameter)
+    p = af.upa_positions(N,f*diameter)
     A[idx,:] = np.abs(af.array_factor_lm(ll,mm,l0,m0,p))**2
 Beam = np.mean(A,0)
 Beam = Beam.reshape((len(l),-1))

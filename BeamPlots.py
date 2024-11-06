@@ -50,8 +50,8 @@ ax2.set_ylabel('m [-]')
 ax2.set_xlim(-1,1)
 ax2.set_ylim(-1,1)
 
-fig.colorbar(img1,ax=ax1)   
-fig.colorbar(img2,ax=ax2)
+fig.colorbar(img1,ax=ax1,label='[dB]')   
+fig.colorbar(img2,ax=ax2,label='[dB]')
 fig.tight_layout()
 fig.savefig('./Outputs/ArrayPatterns.png')
 
@@ -74,10 +74,19 @@ ax2.set_ylabel('m [-]')
 ax2.set_xlim(-1,1)
 ax2.set_ylim(-1,1)
 
-fig.colorbar(img1,ax=ax1)   
-fig.colorbar(img2,ax=ax2)
+fig.colorbar(img1,ax=ax1,label='[dB]')   
+fig.colorbar(img2,ax=ax2,label='[dB]')
 fig.tight_layout()
 fig.savefig('./Outputs/ArrayPatternsElements.png')
+
+plt.figure()
+plt.pcolor(L,M,10*np.log10(Arec/np.max(Arec)),vmin=-30,cmap='turbo')
+plt.xlabel('l [-]')
+plt.ylabel('m [-]')
+plt.xlim(-1,1)
+plt.ylim(-1,1)
+plt.colorbar(label='[dB]')
+plt.savefig('./Outputs/ArrayPatternsElementsRec.png')
 
 #%%
 
