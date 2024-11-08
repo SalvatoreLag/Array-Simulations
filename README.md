@@ -1,2 +1,2 @@
 # Array-Simulations
-Simulation of an antenna arrays 
+Simulation of antenna arrays 
