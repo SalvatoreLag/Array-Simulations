@@ -20,13 +20,15 @@ for i,bw in enumerate([60,90,120]):
     ax = axs[i]
     for j,f in enumerate([4,5,6]):
         filename = f'./ElementPatterns/Farfield{bw}_{f}GHz.txt'
+        if bw == 120:
+            filename = f'./ElementPatterns/Farfield{bw}_{f}GHz_new.txt'
         E,theta,phi = mf.import_pattern(filename,1)
         P = af.radiated_power(E**2,theta,phi)
         D = (4*np.pi*E**2)/P
 
         Eplane1 = D[0,:90]
         Eplane2 = np.flip(D[180,:90])
-        Eplane = 20*np.log10(np.concat((Eplane2,Eplane1)))
+        Eplane = 10*np.log10(np.concat((Eplane2,Eplane1)))
         ax.plot(thetap,Eplane,ls[j],label=f'{f} GHz')
   
     ax.grid()
@@ -34,8 +36,8 @@ for i,bw in enumerate([60,90,120]):
     ax.set_xlabel('Theta [deg]')
     ax.set_ylabel('Directivity [dBi]')
     ax.set_xlim(-90,90)
-    ax.set_ylim(-40,32) 
-    ax.annotate(f'Horn {letters[i]}', (-75,25))
+    ax.set_ylim(-20,20)
+    ax.annotate(f'Horn {letters[i]}', (-75,16))
 
 fig.tight_layout()
 fig.savefig(f'./Outputs/ElementPatternEplaneSub')    
@@ -47,13 +49,15 @@ for bw in [60,90,120]:
     plt.figure()
     for j,f in enumerate([4,5,6]):
         filename = f'./ElementPatterns/Farfield{bw}_{f}GHz.txt'
+        if bw == 120:
+            filename = f'./ElementPatterns/Farfield{bw}_{f}GHz_new.txt'
         E,theta,phi = mf.import_pattern(filename,1)
         P = af.radiated_power(E**2,theta,phi)
         D = (4*np.pi*E**2)/P
 
         Hplane1 = D[90,:90]
         Hplane2 = np.flip(D[270,:90])
-        Hplane = 20*np.log10(np.concat((Hplane2,Hplane1)))
+        Hplane = 10*np.log10(np.concat((Hplane2,Hplane1)))
         plt.plot(thetap,Hplane,ls[j],label=f'{f} GHz')
   
     plt.grid()
@@ -61,5 +65,3 @@ for bw in [60,90,120]:
     plt.xlabel('Theta [deg]')
     plt.ylabel('Directivity [dBi]')
     plt.savefig(f'./Outputs/ElementPatternHplane{bw}')    
-
-# %%
