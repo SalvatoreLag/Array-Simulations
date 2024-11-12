@@ -8,7 +8,7 @@ import scienceplots
 
 plt.style.use(['science','ieee'])
 
-#%%
+#%% Array grids
 c0 = sp.constants.c
 f0 = 5e9
 l0 = c0/f0
@@ -20,10 +20,7 @@ p1 = af.hex_positions(N,dn)*l0
 p2 = af.upa_positions(N,N,dn,dn)*l0
 d = dn*l0
 
-
-# fig = plt.figure(figsize=(7.16,2.9))
-# ax2,ax1 = fig.subplots(1,2)
-
+#%% Plots
 fig1 = plt.figure()
 ax1 = fig1.subplots()
 fig2 = plt.figure()
@@ -50,12 +47,7 @@ for i in range(p2.shape[0]):
     circle = plt.Circle((p2[i,0],p2[i,1]),d/2,color='k',fill=False)
     ax2.add_patch(circle)
 
-# fig.tight_layout()
-# fig.savefig('./Outputs/StationLocs.png')
-
 fig1.tight_layout()
 fig1.savefig('./Outputs/StationLocsHex.png')
 fig2.tight_layout()
 fig2.savefig('./Outputs/StationLocsRec.png')
-
-# %%

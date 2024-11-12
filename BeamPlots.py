@@ -88,9 +88,7 @@ plt.ylim(-1,1)
 plt.colorbar(label='[dB]')
 plt.savefig('./Outputs/ArrayPatternsElementsRec.png')
 
-#%%
-
-# Array pattern - Healpix approach
+#%% Array pattern - Healpix approach
 # Define visible space
 nside = 64
 sky_center = [0,0,1]    
@@ -99,11 +97,10 @@ sky_pixels = hp.query_disc(nside,sky_center,sky_fov)
 u,v,_ = hp.pix2vec(nside,sky_pixels)
 
 # Define scanning space
-scan_fov = 30
-scan_pixels = np.atleast_1d(hp.ang2pix(nside,theta0,phi0)) #np.atleast_1d(hp.query_disc(nside,sky_center,scan_fov))
+scan_pixels = np.atleast_1d(hp.ang2pix(nside,theta0,phi0))
 
 # Get matrix of steered beams
-A_matrix = np.abs(af.array_factor_hpmatrix(nside,sky_pixels,scan_pixels,p))**2
+A_matrix = np.abs(af.array_factor_hpmatrix(nside,sky_pixels,scan_pixels,p1))**2
 
 # Plot normalized steered beam
 A_plot = 10*np.log10(A_matrix[0,:])-10*np.log10(max(A_matrix[0,:]))

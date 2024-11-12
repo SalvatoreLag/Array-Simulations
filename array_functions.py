@@ -4,7 +4,7 @@ import healpy as hp
 
 def upa_positions(Nx:int,Ny: int,dx:float=0.5,dy:float=0.5) -> np.ndarray:
     """   
-    Compute positions  for elements in a regular rectangular grid.
+    Compute element positions for a uniform rectangular grid.
 
     Parameters
     ----------
@@ -31,7 +31,7 @@ def upa_positions(Nx:int,Ny: int,dx:float=0.5,dy:float=0.5) -> np.ndarray:
 
 def hex_positions(Nx:int,dx:float=0.5) -> np.ndarray:
     """   
-    Compute positions  for elements in a regular hexagonal grid.
+    Compute element positions for a uniform hexagonal grid.
 
     Parameters
     ----------
@@ -49,7 +49,7 @@ def hex_positions(Nx:int,dx:float=0.5) -> np.ndarray:
     -----
     The spacing on the y direction is computed to obtain a regular 
     hexagonal grid, and the number of elements on the y axis is computed 
-    to obtain a configuration as close to a square as possible.
+    to obtain a square aperture.
     """
     
     dy = dx*np.sqrt(3)
@@ -64,7 +64,8 @@ def hex_positions(Nx:int,dx:float=0.5) -> np.ndarray:
 
 def array_manifold(l:np.ndarray,m:np.ndarray,positions:np.ndarray) -> np.ndarray:
     """
-    Compute the array manifold.
+    Compute the array manifold for directions defined by the direction
+    cosines l and m.
 
     Parameters
     ----------
@@ -79,6 +80,10 @@ def array_manifold(l:np.ndarray,m:np.ndarray,positions:np.ndarray) -> np.ndarray
     -------
     A: array_like 
         (J,P) array manifold.
+
+    Notes
+    -----
+    The direction cosines l and m should be obtained by flattening 2D meshgrids.
     """
     return np.exp(2j*np.pi*positions@(np.stack((l,m))))
 
@@ -102,7 +107,7 @@ def array_factor_hpmatrix(nside:int,source_pixels:np.ndarray,scan_pixels:np.ndar
     Returns 
     -------
     A: array_like 
-        (len(scan_pixels),len(source_pixels) matrix of complex steered array factors.
+        (len(scan_pixels),len(source_pixels)) matrix of complex steered array factors.
 
     Notes
     -----
@@ -131,7 +136,7 @@ def array_factor_hpmatrix(nside:int,source_pixels:np.ndarray,scan_pixels:np.ndar
 
 def array_factor_hp(nside:int,source_pixels:np.ndarray,scan_pixel:np.ndarray,positions:np.ndarray) -> np.ndarray:
     """
-    Compute the array factor steered in specific direction,
+    Compute the array factor steered in a specific direction,
     using the healpix format.
 
     Parameters
@@ -141,7 +146,7 @@ def array_factor_hp(nside:int,source_pixels:np.ndarray,scan_pixel:np.ndarray,pos
     source_pixels: array_like
         indices for the pixels corresponding to source directions.
     scan_pixel: array_like
-        index for the pixel corresponding to steering direction.
+        index for the pixel corresponding to the steering direction.
     positions: array_like
         (J,2) matrix of normalized element positions.
 
@@ -169,7 +174,7 @@ def array_factor_hp(nside:int,source_pixels:np.ndarray,scan_pixel:np.ndarray,pos
 
 def array_factor_tp(theta:np.ndarray,phi:np.ndarray,theta0:float,phi0:float,positions:np.ndarray) -> np.ndarray:
     """
-    Compute the array factor steered in specific direction,
+    Compute the array factor steered in a specific direction,
     on a flattened theta-phi grid.
 
     Parameters
@@ -190,6 +195,10 @@ def array_factor_tp(theta:np.ndarray,phi:np.ndarray,theta0:float,phi0:float,posi
     a: array_like 
         (len(theta)*len(phi)) array containing the complex array factor steered 
         in direction specified by theta0 and phi0. 
+
+    Notes
+    -----
+    The angles theta and phi should be obtained by flattening 2D meshgrids.
     """
 
     S = hp.ang2vec(theta,phi)[:,:2].T
@@ -223,6 +232,10 @@ def array_factor_lm(l:np.ndarray,m:np.ndarray,l0:float,m0:float,positions:np.nda
     a: array_like 
         (len(l)*len(m)) array containing the complex array factor steered 
         in direction specified by l0 and m0. 
+
+    Notes
+    -----
+    The direction cosines l and m should be obtained by flattening 2D meshgrids.
     """
 
     S = np.stack((l,m))
@@ -274,7 +287,7 @@ def radiated_power(PowerPattern:np.ndarray,theta:np.ndarray,phi:np.ndarray) -> f
     Parameters
     ----------
     PowerPattern: array_like
-        2D array of the far field radiated power density with phi dependence on the 0th axis and
+        2D array of the far-field radiated power density with phi dependence on the 0th axis and
         theta dependence on the 1st axis.
     theta: array_like
         elevation angles in radians.
@@ -295,7 +308,7 @@ def radiated_power(PowerPattern:np.ndarray,theta:np.ndarray,phi:np.ndarray) -> f
 
 def numerical_directivity(PowerPattern:np.ndarray,theta:np.ndarray,phi:np.ndarray) -> float:
     """
-    Evaluate numerically the directivity of a far field radiation pattern.
+    Evaluate numerically the directivity of a far-field radiation pattern.
 
     Parameters
     ----------

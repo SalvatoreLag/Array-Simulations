@@ -34,29 +34,17 @@ print(Ael)
 Nel = 100/Ael
 print(Nel)
 
-#%% Set figures of merit
-Nel = 14000
-As = 1.92
-
 #%% Stations
 N = 10
-# Ny = np.round(N/np.sqrt(3),decimals=0).astype(int)
-# d = np.sqrt(As)/wl/(N-1)
-# d = np.sqrt(As/(N-1)/(Ny-1))/wl
 d = 1.6
 p = af.hex_positions(N,d)
 J = p.shape[0]
 print(J)
 
-# Aps = ((N-1)*d*wl)**2
-# Aps = (N-1)*(Ny-1)*(d*wl)**2
-# print(Aps)
-
 #%% Interferometer
-# nStations = np.round(Nel/J)
 nStations = 20
 print(nStations)
-psi_max = 30
+psi_max = 60
 dpsi = psi_max/nStations
 stationRots = np.radians(np.arange(0,psi_max,dpsi))
 
@@ -83,50 +71,3 @@ plt.ylabel('m [-]')
 plt.colorbar(label='[dB]')
 plt.savefig('./Outputs/StationRotationsHex20_30.png')
 # plt.show()
-
-# %%
-plt.pcolor(L,M,10*np.log10(Av[20,:].reshape((len(l),-1))),cmap='turbo',vmin=-40)
-plt.xlabel('l [-]')
-plt.ylabel('m [-]')
-plt.colorbar(label='[dB]')
-# plt.show()
-
-# %%
-d = 1.6
-N = 10
-p = af.hex_positions(N,d)
-# p = af.hex_positions(N,d)
-J = p.shape[0]
-
-alpha = np.radians(60)
-
-#%%
-ns1 = int(alpha*N)
-# ns1 = 20
-
-for ns in range(ns1,ns1+1):
-    dalpha = alpha/ns
-    stationRots = np.arange(0,alpha,dalpha)
-
-    Av = np.zeros((ns,len(ll)))
-    for idx,psi in enumerate(stationRots):
-        R = np.array([[np.cos(psi),-np.sin(psi)],
-                    [np.sin(psi), np.cos(psi)]]).T
-        pRot = p@R
-        a = af.array_factor_lm(ll,mm,l0,m0,pRot)
-        Av[idx,:] = np.abs(a)**2
-
-    # Compute average power pattern
-    avg_beam = np.mean(sp.linalg.khatri_rao(Av,np.conj(Av)),0)
-    avg_beam = 10*np.log10(avg_beam/np.max(avg_beam))
-    avg_beam = avg_beam.reshape((len(l),-1))
-
-    avg_beam[mask] = np.inf
-
-    plt.pcolor(L,M,avg_beam,cmap='turbo',vmin=-30,vmax=-10)
-    plt.xlabel('l [-]')
-    plt.ylabel('m [-]')
-    plt.colorbar(label='[dB]')
-    plt.show()
-
-# %%

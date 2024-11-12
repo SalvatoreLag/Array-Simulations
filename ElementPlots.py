@@ -8,7 +8,7 @@ import array_functions as af
 plt.style.use(['science','ieee'])
 
 
-#%%
+#%% E-plane
 thetap = np.arange(-90,90,1)
 
 fig = plt.figure(figsize=(7.16,2.5))
@@ -42,7 +42,7 @@ for i,bw in enumerate([60,90,120]):
 fig.tight_layout()
 fig.savefig(f'./Outputs/ElementPatternEplaneSub')    
 
-#%%
+#%% H-plane
 ls = ['--r','-k',':b']
 
 for bw in [60,90,120]:
@@ -55,7 +55,7 @@ for bw in [60,90,120]:
         P = af.radiated_power(E**2,theta,phi)
         D = (4*np.pi*E**2)/P
 
-        Hplane1 = D[90,:90]
+        Hplane1 = D[89,:90]
         Hplane2 = np.flip(D[270,:90])
         Hplane = 10*np.log10(np.concat((Hplane2,Hplane1)))
         plt.plot(thetap,Hplane,ls[j],label=f'{f} GHz')

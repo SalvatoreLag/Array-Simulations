@@ -52,8 +52,8 @@ def CSTmap2healpix(in_filename:str,nside_out:int) -> np.ndarray:
 
 def import_pattern(filename:str,delta:float) -> np.ndarray:
     """   
-    Import a CST radiation pattern into a [0,180]x[0,360] grid 
-    with resolution delta.
+    Import a CST radiation pattern into a [0,180]x[0,360] 
+    theta-phi grid with resolution delta.
 
     Parameters
     ----------
@@ -65,7 +65,7 @@ def import_pattern(filename:str,delta:float) -> np.ndarray:
     Returns 
     -------
     Eabs: array_like 
-        absolute value of the radiated field.
+        absolute value of the radiated far-field.
     theta: array_like
         elevation angles in radians where the radiated field is evaluated.
     phi: array_like

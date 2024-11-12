@@ -23,7 +23,7 @@ p0 = np.radians(125)
 l0 = np.sin(t0)*np.cos(p0)
 m0 = np.sin(t0)*np.sin(p0)
 
-# Frequency averaging array beam
+#%% Frequency averaging array beam
 f0 = 5e9
 BW_norm = 1e9/f0
 nf = 21
@@ -39,8 +39,9 @@ Beam = Beam.reshape((len(l),-1))
 #%% Plot
 Beam_plot = 10*np.log10(Beam)-10*np.log10(np.max(Beam))
 Beam_plot[mask] = np.inf
+plt.figure()
 plt.pcolor(L,M,Beam_plot,cmap='turbo',vmin=-20)
 plt.xlabel('l [-]')
 plt.ylabel('m [-]')
 plt.colorbar(label='[dB]')
-# plt.savefig('./Outputs/FrequencyAveraging.png')
+plt.savefig('./Outputs/FrequencyAveraging.png')
