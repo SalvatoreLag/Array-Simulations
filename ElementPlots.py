@@ -23,8 +23,6 @@ for i,bw in enumerate([60,90,120]):
     ax = axs[i]
     for j,f in enumerate([4,5,6]):
         filename = f'./ElementPatterns/Farfield{bw}_{f}GHz.txt'
-        if bw == 120:
-            filename = f'./ElementPatterns/Farfield{bw}_{f}GHz_new.txt'
         E,theta,phi = mf.import_pattern(filename,1)
         P = af.radiated_power(E**2,theta,phi)
         D = (4*np.pi*E**2)/P
@@ -52,8 +50,6 @@ for bw in [60,90,120]:
     plt.figure()
     for j,f in enumerate([4,5,6]):
         filename = f'./ElementPatterns/Farfield{bw}_{f}GHz.txt'
-        if bw == 120:
-            filename = f'./ElementPatterns/Farfield{bw}_{f}GHz_new.txt'
         E,theta,phi = mf.import_pattern(filename,1)
         P = af.radiated_power(E**2,theta,phi)
         D = (4*np.pi*E**2)/P
