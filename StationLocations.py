@@ -1,3 +1,6 @@
+'''Compute the baselines and PSF for an interferometer whose stations
+form a uniform circular array.'''
+
 #%% Imports
 import array_functions as af
 import numpy as np

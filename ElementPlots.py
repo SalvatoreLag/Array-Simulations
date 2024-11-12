@@ -1,4 +1,7 @@
-#%%
+'''Plot the E-plane and H-plane cuts for element patterns
+imported from CST.'''
+
+#%% Imports
 import numpy as np
 import map_functions as mf
 import scienceplots

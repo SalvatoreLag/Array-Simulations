@@ -1,3 +1,6 @@
+'''Simulate imaging results from a phased array station 
+used as an interferometer.'''
+
 import array_functions as af
 import healpy as hp
 import numpy as np
@@ -84,4 +87,3 @@ plt.figure()
 plt.tripcolor(l,m,Id)
 plt.colorbar()
 plt.savefig('./Outputs/dirty3_lm.png')
-    

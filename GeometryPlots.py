@@ -1,4 +1,6 @@
-#%%
+'''Plot element locations for different geometries.'''
+
+#%% Imports
 import numpy as np
 import scipy as sp
 import array_functions as af

@@ -1,3 +1,6 @@
+'''Plot the average station pattern resulting from rotations
+of identical phased-array stations.'''
+
 #%% Imports
 import array_functions as af
 import numpy as np

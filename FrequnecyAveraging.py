@@ -1,4 +1,6 @@
-#%%
+'''Compute the array pattern resulting from frequency averaging.'''
+
+#%% Imports
 import array_functions as af
 import numpy as np
 import matplotlib.pyplot as plt

@@ -1,4 +1,7 @@
-#%%
+'''Plot the array pattern for different arrays using different formats,
+with isotropic elements and real elements.'''
+
+#%% Imports
 import array_functions as af
 import healpy as hp
 import numpy as np

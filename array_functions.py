@@ -1,7 +1,6 @@
 import numpy as np
 import healpy as hp
 
-
 def upa_positions(Nx:int,Ny: int,dx:float=0.5,dy:float=0.5) -> np.ndarray:
     """   
     Compute element positions for a uniform rectangular grid.

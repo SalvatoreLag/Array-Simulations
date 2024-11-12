@@ -1,4 +1,8 @@
-#%%
+'''Compute the directivity and effective area for uniform rectangular
+and uniform tirangular arrays through numerical integration, for different 
+element spacings and different number of elements.'''
+
+#%% Imports
 import numpy as np
 import scipy as sp
 import array_functions as af

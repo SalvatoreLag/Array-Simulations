@@ -1,7 +1,5 @@
 import numpy as np
 import healpy as hp
-import matplotlib.pyplot as plt
-
 
 def CSTmap2healpix(in_filename:str,nside_out:int) -> np.ndarray:
     """   

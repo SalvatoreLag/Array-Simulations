@@ -1,3 +1,7 @@
+'''Compute the directivity of a uniform linear array using the analytical formula
+or through numerical integration, for different element spacings.'''
+
+#%% Imports
 import numpy as np
 import array_functions as af
 import matplotlib.pyplot as plt
